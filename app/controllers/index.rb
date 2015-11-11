@@ -7,15 +7,32 @@ get '/' do
 end
 
 post '/abuelita' do
+
+	p "x"*100
+	p params
+
 	user_input = params[:user_input]
   nieto = nil
 	nieto = user_input
-	if  nieto == "BYE"
-		redirect to '/?abuelita=BYE' 
-	elsif nieto == nieto.upcase
-		redirect to '/?abuelita=NO DESDE 1983'
-	else
-		redirect to '/?abuelita=NO TE ESCUCHO HIJO'
-	end
+
+	response = grandma_response(nieto)
+	
+	p request
+	if request.xhr?
+    response
+  else
+  	redirect to "/?abuelita=#{response}" 
+  end
+
 end
 
+
+def grandma_response(nieto)
+	if  nieto == "BYE"
+		'BYE' 
+	elsif nieto == nieto.upcase
+		'NO DESDE 1983'
+	else
+		'NO TE ESCUCHO HIJO'
+	end
+end
